@@ -5,7 +5,6 @@ export class LocalSavePurchases implements SavePurchases {
   constructor(private readonly cacheStore: CacheStore) {}
 
   async save(purchases: Array<SavePurchases.Params>): Promise<void> {
-    this.cacheStore.delete("purchases");
-    this.cacheStore.insert("purchases", { timestamp: new Date(), purchases });
+    this.cacheStore.replace("purchases", { timestamp: new Date(), purchases });
   }
 }
