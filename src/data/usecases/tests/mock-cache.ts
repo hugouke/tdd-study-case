@@ -4,6 +4,7 @@ import { SavePurchases } from "@/domain/usecases";
 export class CacheStoreSpy implements CacheStore {
   messages: Array<CacheStoreSpy.Message> = [];
   insertValues: Array<SavePurchases.Params> = [];
+  timestamp: Date = new Date();
   key: string;
 
   delete(key: string): void {
@@ -14,6 +15,7 @@ export class CacheStoreSpy implements CacheStore {
   insert(key: string, value: any): void {
     this.messages.push(CacheStoreSpy.Message.insert);
     this.key = key;
+    this.timestamp = value.timestamp;
     this.insertValues = value;
   }
 
