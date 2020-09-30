@@ -1,9 +1,9 @@
 import { CacheStore } from "@/data/protocols/cache";
-import { SavePurchases } from "@/domain/usecases";
+import { Purchases } from "@/domain/usecases";
 
 export class CacheStoreSpy implements CacheStore {
   messages: Array<CacheStoreSpy.Message> = [];
-  insertValues: Array<SavePurchases.Params> = [];
+  insertValues: Array<Purchases.Filds> = [];
   timestamp: Date = new Date();
   key: string;
 
