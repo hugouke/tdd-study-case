@@ -12,7 +12,16 @@ export class LocalPurchases implements SavePurchases, GetPurchases {
 
   async getAll(): Promise<any> {
     try {
-      return this.cacheStore.fetch(this.key);
+      const data = await this.cacheStore.fetch(this.key);
+      let expirationDate = new Date();
+      let cacheDate = new Date(data.timestamp);
+      expirationDate.setDate(expirationDate.getDate() - 3);
+
+      if (cacheDate > expirationDate) {
+        return data;
+      }
+
+      throw new Error();
     } catch {
       this.cacheStore.delete(this.key);
       return [];
