@@ -1,4 +1,4 @@
-import { CacheStore } from "@/data/protocols/cache";
+import { CachePolicy, CacheStore } from "@/data/protocols/cache";
 import { GetPurchases, Purchases, SavePurchases } from "@/domain/usecases";
 
 export class LocalPurchases implements SavePurchases, GetPurchases {
@@ -13,11 +13,9 @@ export class LocalPurchases implements SavePurchases, GetPurchases {
   async getAll(): Promise<any> {
     try {
       const data = await this.cacheStore.fetch(this.key);
-      let expirationDate = new Date();
-      let cacheDate = new Date(data.timestamp);
-      expirationDate.setDate(expirationDate.getDate() - 3);
+      const cacheDate = data.timestamp;
 
-      if (cacheDate > expirationDate) {
+      if (CachePolicy.validate(cacheDate)) {
         return data;
       }
 

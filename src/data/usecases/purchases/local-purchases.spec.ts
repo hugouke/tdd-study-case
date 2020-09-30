@@ -1,3 +1,4 @@
+import { CachePolicy } from "@/data/protocols/cache";
 import { CacheStoreSpy, mockPurchases } from "../tests";
 import { LocalPurchases } from "./local-purchases";
 
@@ -59,13 +60,12 @@ describe("LocalPurchases", () => {
     expect(cacheStore.key).toBe("purchases");
   });
 
-  test("Should return a list of purchases if cache is lass than 3 days old", async () => {
+  test("Should return a list of purchases if cache is not expired", async () => {
     const { sut, cacheStore } = makeSut();
     await sut.getAll();
     const currentTimestamp = new Date();
-    const timestamp = new Date(currentTimestamp);
-    timestamp.setDate(timestamp.getDate() - 3);
-    timestamp.setDate(timestamp.getMinutes() + 10);
+    const timestamp = CachePolicy.getCacheExpirationDate();
+    timestamp.setDate(timestamp.getMinutes() + 30);
     const purchases = mockPurchases();
     cacheStore.fetchData = { timestamp, purchases };
 
@@ -74,13 +74,12 @@ describe("LocalPurchases", () => {
     expect(cacheStore.key).toBe("purchases");
   });
 
-  test("Should return a list of purchases if cache is lass than 3 days old", async () => {
+  test("Should return a list of purchases if cache is expired", async () => {
     const { sut, cacheStore } = makeSut();
     await sut.getAll();
     const currentTimestamp = new Date();
-    const timestamp = new Date(currentTimestamp);
-    timestamp.setDate(timestamp.getDate() - 3);
-    timestamp.setDate(timestamp.getMinutes() - 10);
+    const timestamp = CachePolicy.getCacheExpirationDate();
+    timestamp.setDate(timestamp.getMinutes() - 30);
     const purchases = mockPurchases();
     cacheStore.fetchData = { timestamp, purchases };
 
