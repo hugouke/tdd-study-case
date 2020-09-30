@@ -5,8 +5,6 @@ export class CachePolicy {
 
   static validate(date: Date): boolean {
     const expirationDate = CachePolicy.getCacheExpirationDate();
-    console.log(date);
-    console.log('*'+expirationDate);
     return date > expirationDate;
   }
 
