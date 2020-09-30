@@ -10,7 +10,7 @@ export class LocalPurchases implements SavePurchases, GetPurchases {
     this.cacheStore.replace(this.key, { timestamp: new Date(), purchases });
   }
 
-  async getAll(): Promise<Array<Purchases.Filds>> {
+  async getAll(): Promise<any> {
     try {
       return this.cacheStore.fetch(this.key);
     } catch {

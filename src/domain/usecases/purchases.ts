@@ -3,7 +3,7 @@ export interface SavePurchases {
 }
 
 export interface GetPurchases {
-    getAll: () => Promise<Array<Purchases.Filds>>
+    getAll: () => Promise<any>
 }
 
 export namespace Purchases {

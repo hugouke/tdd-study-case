@@ -4,6 +4,7 @@ import { Purchases } from "@/domain/usecases";
 export class CacheStoreSpy implements CacheStore {
   messages: Array<CacheStoreSpy.Message> = [];
   insertValues: Array<Purchases.Filds> = [];
+  fetchData: any = [];
   timestamp: Date = new Date();
   key: string;
 
@@ -24,10 +25,10 @@ export class CacheStoreSpy implements CacheStore {
     this.insert(key, value);
   }
 
-  async fetch(key: string): Promise<Array<Purchases.Filds>> {
+  async fetch(key: string): Promise<any> {
     this.key = key;
     this.messages.push(CacheStoreSpy.Message.fetch);
-    return [];
+    return this.fetchData;
   }
 
   simulateDeleteError(): void {

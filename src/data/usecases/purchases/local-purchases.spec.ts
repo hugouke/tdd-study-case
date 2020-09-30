@@ -43,7 +43,7 @@ describe("LocalPurchases", () => {
     cacheStore.simulateInsertError();
     await expect(sut.save(mockPurchases())).rejects.toThrow();
   });
-  
+
   test("Should call correct key on getAll", async () => {
     const { sut, cacheStore } = makeSut();
     await sut.getAll();
@@ -56,6 +56,18 @@ describe("LocalPurchases", () => {
     cacheStore.simulateFetchError();
     expect(await sut.getAll()).toEqual([]);
     expect(cacheStore.messages).toEqual([CacheStoreSpy.Message.delete]);
+    expect(cacheStore.key).toBe("purchases");
+  });
+
+  test("Should return a list of purchases if cache is lass than 3 days old", async () => {
+    const { sut, cacheStore } = makeSut();
+    await sut.getAll();
+    const timestamp = new Date();
+    const purchases = mockPurchases();
+    cacheStore.fetchData = { timestamp, purchases };
+
+    expect(cacheStore.messages).toEqual([CacheStoreSpy.Message.fetch]);
+    expect(await sut.getAll()).toEqual({ timestamp, purchases });
     expect(cacheStore.key).toBe("purchases");
   });
 });
