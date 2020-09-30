@@ -43,4 +43,19 @@ describe("LocalPurchases", () => {
     cacheStore.simulateInsertError();
     await expect(sut.save(mockPurchases())).rejects.toThrow();
   });
+  
+  test("Should call correct key on getAll", async () => {
+    const { sut, cacheStore } = makeSut();
+    await sut.getAll();
+    expect(cacheStore.messages).toEqual([CacheStoreSpy.Message.fetch]);
+    expect(cacheStore.key).toBe("purchases");
+  });
+
+  test("Should return empty list with getAll fails", async () => {
+    const { sut, cacheStore } = makeSut();
+    cacheStore.simulateFetchError();
+    expect(await sut.getAll()).toEqual([]);
+    expect(cacheStore.messages).toEqual([CacheStoreSpy.Message.delete]);
+    expect(cacheStore.key).toBe("purchases");
+  });
 });

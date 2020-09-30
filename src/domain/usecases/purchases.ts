@@ -1,6 +1,9 @@
-export interface Purchases {
+export interface SavePurchases {
     save: (purchases: Array<Purchases.Filds>) => Promise<void>
-    getAll: () => Promise<void>
+}
+
+export interface GetPurchases {
+    getAll: () => Promise<Array<Purchases.Filds>>
 }
 
 export namespace Purchases {

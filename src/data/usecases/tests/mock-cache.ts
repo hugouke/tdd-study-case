@@ -24,6 +24,12 @@ export class CacheStoreSpy implements CacheStore {
     this.insert(key, value);
   }
 
+  async fetch(key: string): Promise<Array<Purchases.Filds>> {
+    this.key = key;
+    this.messages.push(CacheStoreSpy.Message.fetch);
+    return [];
+  }
+
   simulateDeleteError(): void {
     jest.spyOn(CacheStoreSpy.prototype, "delete").mockImplementationOnce(() => {
       throw new Error();
@@ -35,11 +41,18 @@ export class CacheStoreSpy implements CacheStore {
       throw new Error();
     });
   }
+
+  simulateFetchError(): void {
+    jest.spyOn(CacheStoreSpy.prototype, "fetch").mockImplementationOnce(() => {
+      throw new Error();
+    });
+  }
 }
 
 export namespace CacheStoreSpy {
   export enum Message {
     delete,
     insert,
+    fetch,
   }
 }
